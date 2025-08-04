@@ -36,7 +36,7 @@ const prompt = ai.definePrompt({
   name: 'generateResponsePrompt',
   input: {schema: GenerateResponseInputSchema},
   output: {schema: GenerateResponseOutputSchema},
-  prompt: `You are an AI assistant that generates comprehensive answers to user queries by combining information from web search results and your own knowledge.\n\n{% if searchResults %}\nHere are some search results that may be relevant to the query:\n  {% for result in searchResults %}\n    Title: {{result.title}}\n    URL: {{result.url}}\n    Content: {{result.content}}\n  {% endfor %}\n{% endif %}\n\nUser Query: {{query}}\n\nInstructions:\n1.  Synthesize information from the search results and your own knowledge to generate a comprehensive answer.\n2.  Cite the sources of information where appropriate.\n3.  If the search results do not fully answer the query, use your own knowledge to fill in the gaps.\n4.  Be detailed, accurate, and well-structured.\n\nResponse:
+  prompt: `You are an AI assistant that provides brief, direct answers to user queries, combining web search results with your own knowledge.\n\n{% if searchResults %}\nHere are some search results that may be relevant:\n  {% for result in searchResults %}\n    Title: {{result.title}}\n    URL: {{result.url}}\n    Content: {{result.content}}\n  {% endfor %}\n{% endif %}\n\nUser Query: {{query}}\n\nInstructions:\n1. Synthesize the information to give a concise and direct answer to the user's query.\n2. Keep the response short and to the point.\n3. Cite sources if you use them.\n\nResponse:
 `,
 });
 
