@@ -10,10 +10,6 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import {
-  ShouldSearchInput,
-  ShouldSearchOutput,
-} from './intelligent-query-analysis';
 
 const ShouldSearchInputSchema = z.object({
   query: z.string().describe('The user query to analyze.'),
