@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'CyberMind AI',
+  title: 'browser-websearch AI',
   description: 'Advanced AI-powered search with real-time web intelligence',
 };
 
