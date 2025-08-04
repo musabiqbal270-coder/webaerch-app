@@ -11,6 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { shouldSearchFlow } from './should-search-flow';
 
 const ShouldSearchInputSchema = z.object({
   query: z.string().describe('The user query to analyze.'),
@@ -27,9 +28,3 @@ export type ShouldSearchOutput = z.infer<typeof ShouldSearchOutputSchema>;
 export async function shouldSearch(input: ShouldSearchInput): Promise<ShouldSearchOutput> {
   return shouldSearchFlow(input);
 }
-
-const prompt = ai.definePrompt({
-  name: 'shouldSearchPrompt',
-  input: {schema: ShouldSearchInputSchema},
-  output: {schema: ShouldSearchOutputSchema},
-  prompt: `Analyze this user query: "{{query}}\
