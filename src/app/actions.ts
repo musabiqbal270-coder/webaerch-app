@@ -11,7 +11,7 @@ async function searchWeb(query: string): Promise<SearchResult[]> {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.TAVILY_API_KEY}`
+        'x-tavily-api-key': process.env.TAVILY_API_KEY || ''
       },
       body: JSON.stringify({
         query: query,
