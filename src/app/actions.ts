@@ -4,29 +4,45 @@ import { shouldSearch } from '@/ai/flows/intelligent-query-analysis';
 import { generateResponse } from '@/ai/flows/ai-response-generation';
 import type { SearchResult } from '@/lib/types';
 
-// Mocked Tavily search function
 async function searchWeb(query: string): Promise<SearchResult[]> {
   console.log(`Searching web for: ${query}`);
-  // In a real app, this would call the Tavily API.
-  // For this mock, we return some dummy data.
-  await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-  return [
-    {
-      title: "Breakthrough in AI: 2024 Year in Review",
-      url: "https://example.com/ai-breakthrough-2024",
-      content: "A comprehensive look at the major advancements in artificial intelligence throughout 2024, including new model architectures and their real-world applications."
-    },
-    {
-      title: "The Next Generation of AI - What to Expect",
-      url: "https://example.com/next-gen-ai",
-      content: "Experts predict that 2024's AI breakthroughs are just the beginning. The focus is shifting towards more efficient, multi-modal models that can reason and interact more naturally."
-    },
-    {
-      title: "AI Ethics and Safety Report 2024",
-      url: "https://example.com/ai-ethics-2024",
-      content: "As AI capabilities grew in 2024, so did the conversation around ethics and safety. This report outlines new frameworks for responsible AI development and deployment."
+  try {
+    const response = await fetch('https://api.tavily.com/search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        api_key: process.env.TAVILY_API_KEY,
+        query: query,
+        search_depth: "basic",
+        include_answer: false,
+        max_results: 5,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Tavily API error:', response.status, response.statusText);
+      const errorBody = await response.text();
+      console.error('Tavily error body:', errorBody);
+      return []; // Return empty array on error
     }
-  ];
+
+    const data = await response.json();
+    // The Tavily API returns results in a `results` property.
+    // Each result has `title`, `url`, and `content`.
+    if (data.results && Array.isArray(data.results)) {
+       return data.results.map((result: any) => ({
+        title: result.title,
+        url: result.url,
+        content: result.content, // 'content' from Tavily is the snippet
+      }));
+    }
+    return [];
+  } catch (error) {
+    console.error('Failed to fetch from Tavily API:', error);
+    return [];
+  }
 }
 
 export async function processQuery(query: string, assistantId: string) {
